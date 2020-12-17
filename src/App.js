@@ -16,7 +16,7 @@ import "./App.css";
 
 function App() {
   const [countries, setCountries] = useState([]);
-  const [country, setCountry] = useState("Worldwide");
+  const [country, setCountry] = useState("worldwide");
   const [countryInfo, setCountryInfo] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [mapCenter, setMapCenter] = useState({ lat: 34.80746, lng: -40.4796 });
@@ -52,21 +52,24 @@ function App() {
 
   const onCountryChange = async (e) => {
     const countryCode = e.target.value;
+    console.log("show >>>>>>>", countryCode);
     setCountry(countryCode);
 
     const url =
-      countryCode === "Worldwide"
+      countryCode === "worldwide"
         ? "https://disease.sh/v3/covid-19/all"
-        : `https://disease.sh/v3/covid-19/countries/${countryCode}`;
+        : `https://disease.sh/v3/covid-19/countries/${countryCode.name}`;
 
     await fetch(url)
       .then((response) => response.json())
       .then((data) => {
         setCountry(countryCode);
         setCountryInfo(data);
-        console.log("show >>>>>>>", data);
-        // setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
-        // setMapZoom(4);
+        console.log("show >>>>>>>", mapCenter);
+        setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+
+        setMapZoom(4);
+        console.log("show >>>>>>>", mapCenter);
       });
   };
 
@@ -74,14 +77,18 @@ function App() {
     <div className="app">
       <div className="app_left">
         <div className="app_header">
+          <h1>COVID-19 Tracker</h1>
           <FormControl className="app_dropdown">
             <Select
               variant="outlined"
               onChange={onCountryChange}
               value={country}
             >
+              <MenuItem value="worldwide">Worldwide</MenuItem>
               {countries.map((country) => (
-                <MenuItem value={country}>{country.name}</MenuItem>
+                <MenuItem key={country.name} value={country}>
+                  {country.name}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
