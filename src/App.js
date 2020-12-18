@@ -28,7 +28,7 @@ function App() {
       .then((data) => {
         setCountryInfo(data);
       });
-  });
+  }, []);
 
   useEffect(() => {
     const getCountriesData = async () => {
@@ -52,24 +52,22 @@ function App() {
 
   const onCountryChange = async (e) => {
     const countryCode = e.target.value;
-    console.log("show >>>>>>>", countryCode);
+
     setCountry(countryCode);
 
     const url =
       countryCode === "worldwide"
         ? "https://disease.sh/v3/covid-19/all"
-        : `https://disease.sh/v3/covid-19/countries/${countryCode.name}`;
+        : `https://disease.sh/v3/covid-19/countries/${countryCode}`;
 
     await fetch(url)
       .then((response) => response.json())
       .then((data) => {
         setCountry(countryCode);
         setCountryInfo(data);
-        console.log("show >>>>>>>", mapCenter);
         setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
-
-        setMapZoom(4);
         console.log("show >>>>>>>", mapCenter);
+        setMapZoom(4);
       });
   };
 
@@ -86,7 +84,7 @@ function App() {
             >
               <MenuItem value="worldwide">Worldwide</MenuItem>
               {countries.map((country) => (
-                <MenuItem key={country.name} value={country}>
+                <MenuItem key={country.name} value={country.value}>
                   {country.name}
                 </MenuItem>
               ))}
