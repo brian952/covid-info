@@ -6,6 +6,7 @@ function Map({ center, zoom }) {
   return (
     <div className="map">
       <MapContainer center={center} zoom={zoom} maxZoom={16}>
+        {console.log("show >>>>>>>", center)}
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
